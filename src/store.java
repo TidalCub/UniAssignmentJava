@@ -1,10 +1,11 @@
+import org.json.simple.parser.ParseException;
+
 import java.io.*;
 import java.util.Scanner;
 
 public class store
 {
-    public static void main(String args[])
-    {
+    public static void main(String args[]) throws IOException, ParseException {
 
         Scanner input = new Scanner(System.in);
         System.out.println("""
@@ -17,38 +18,39 @@ public class store
         System.out.println("2. UPDATE QUANTITY OF EXISTING ITEM");
         System.out.println("3. REMOVE ITEM");
         System.out.println("4. VIEW DAILY TRANSACTION REPORT");
+        System.out.println("5. VIEW ITEM FILE");
         System.out.println("---------------------------------");
-        System.out.println("5. Exit");
+        System.out.println("6. Exit");
 
 
         System.out.print("\n Enter a choice and Press ENTER to continue[1-5]:");
         int userinput = input.nextInt();
 
-
-        while(userinput !=5)
-        {
-            if (userinput>5 || userinput<1) {
-                System.out.println("This doesn't appear to be a valid option...!");
-                break;
-            }
-            if (userinput == 1)	{
+        switch (userinput){
+            case 1:
                 System.out.print("\n New Item Added");
                 break;
-            }
-            else if (userinput == 2) {
+            case 2:
                 System.out.print("\n Item quantity updated");
                 break;
-            }
-            else if (userinput == 3) {
+            case 3:
                 System.out.print("\n Item Removed");
                 break;
-            }
-            else if (userinput == 4) {
+            case 4:
                 System.out.print("\n Report printed");
                 break;
-            }
-
+            case 5:
+                JsonModifyer output = new JsonModifyer();
+                System.out.println(output.JSONgetter());
+                break;
+            case 6:
+                System.out.println("Exiting... ");
+                break;
+            default:
+                System.out.println("This doesn't appear to be a valid option...!");
         }
+
+
 
         System.out.println("\n\n Thanks for using this program...!");
     }
