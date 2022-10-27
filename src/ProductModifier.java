@@ -4,8 +4,7 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 import java.util.Scanner;
 public class ProductModifier {
-
-public static DB db = new DB();
+    static DB db = new DB();
     public static void AllProduct() {
         System.out.print("""
                 -----------------------------------------------
@@ -57,6 +56,15 @@ public static DB db = new DB();
 
 
 
+
+    }
+    public static void  removeProuct(){
+        Scanner input = new Scanner(System.in);
+        AllProduct();
+        System.out.print("\nEnter Product ID to Delete ");
+        int ID = input.nextInt();
+
+        db.removeProduct(ID);
 
     }
 }

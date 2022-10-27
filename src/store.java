@@ -39,6 +39,7 @@ public class store
                 System.out.println("\n Item quantity updated \n\n");
                 break;
             case 3:
+                ProductModifier.removeProuct();
                 System.out.print("\n Item Removed");
                 break;
             case 4:

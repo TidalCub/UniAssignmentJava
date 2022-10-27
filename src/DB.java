@@ -61,4 +61,18 @@ public class DB {
 
     }
 
+    public static String removeProduct(int ID){
+        try{
+            String deleteStatment = "DELETE FROM Stock WHERE ID = ?";
+            PreparedStatement PrepStat = connection.prepareStatement(deleteStatment);
+            PrepStat.setInt(1, ID);
+            PrepStat.executeUpdate();
+
+            return "Ok";
+        } catch (SQLException e) {
+            return e.getMessage();
+        }
+
+    }
+
 }
