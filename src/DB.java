@@ -14,7 +14,7 @@ public class DB {
             throw new RuntimeException(e);
         }
     }
-    public static ResultSet allproducts()  {
+    public ResultSet allproducts()  {
         try{
             ResultSet rs = statement.executeQuery("select * from Stock");
             return rs;
@@ -23,7 +23,7 @@ public class DB {
         }
         return null;
     }
-    public static ResultSet productLookup(int ID){
+    public ResultSet productLookup(int ID){
         try{
             ResultSet singleProduct = statement.executeQuery("select * from stock where ID = " + ID + " limit 1 ");
             return singleProduct;
@@ -32,7 +32,7 @@ public class DB {
         }
         return null;
     }
-    public static void newProduct(Product newProduct){
+    public void newProduct(Product newProduct){
         try{
             String insert = "INSERT INTO Stock(Name, unitPrice, qtyInStock, totalPrice) VALUES (?,?,?,?)";
             PreparedStatement pstmt = connection.prepareStatement(insert);
@@ -48,7 +48,7 @@ public class DB {
         }
 
     }
-    public static String updateProduct(Product updateProduct){
+    public String updateProduct(Product updateProduct){
         try{
 
             statement.executeUpdate("UPDATE Stock SET qtyInStock = " + updateProduct.qtyInStock +", totalPrice = "+ updateProduct.totalPrice + " WHERE ID = " + updateProduct.ID);
@@ -61,7 +61,7 @@ public class DB {
 
     }
 
-    public static String removeProduct(int ID){
+    public String removeProduct(int ID){
         try{
             String deleteStatment = "DELETE FROM Stock WHERE ID = ?";
             PreparedStatement PrepStat = connection.prepareStatement(deleteStatment);

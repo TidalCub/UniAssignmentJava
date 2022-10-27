@@ -28,18 +28,20 @@ public class store
         System.out.print("\n Enter a choice and Press ENTER to continue[1-5]:");
         int userinput = input.nextInt();
 
+        ProductModifier pm = new ProductModifier();
+
          switch (userinput){
             case 1:
 
-                ProductModifier.NewProduct();
+                pm.NewProduct();
                 System.out.println("New Product Added ");
                 break;
             case 2:
-                ProductModifier.updateProduct();
+                pm.updateProduct();
                 System.out.println("\n Item quantity updated \n\n");
                 break;
             case 3:
-                ProductModifier.removeProuct();
+                pm.removeProuct();
                 System.out.print("\n Item Removed");
                 break;
             case 4:
@@ -47,7 +49,7 @@ public class store
                 break;
             case 5:
 
-                ProductModifier.AllProduct();
+                pm.AllProduct();
                 break;
             case 6:
                 System.out.println("Exiting... ");

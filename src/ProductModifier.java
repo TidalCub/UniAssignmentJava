@@ -4,8 +4,8 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 import java.util.Scanner;
 public class ProductModifier {
-    static DB db = new DB();
-    public static void AllProduct() {
+    DB db = new DB();
+    public void AllProduct() {
         System.out.print("""
                 -----------------------------------------------
                               ALL CURRENT STOCK
@@ -31,7 +31,7 @@ public class ProductModifier {
 
     }
 
-    public static void NewProduct(){
+    public void NewProduct(){
         Scanner input = new Scanner(System.in);
         System.out.print("Enter Product Name: ");
         String Name = input.next();
@@ -43,7 +43,7 @@ public class ProductModifier {
         db.newProduct(newProduct);
     }
 
-    public static void updateProduct() throws SQLException {
+    public void updateProduct() throws SQLException {
         Scanner input = new Scanner(System.in);
         AllProduct();
         System.out.print("\nEnter Product ID: ");
@@ -58,7 +58,7 @@ public class ProductModifier {
 
 
     }
-    public static void  removeProuct(){
+    public void  removeProuct(){
         Scanner input = new Scanner(System.in);
         AllProduct();
         System.out.print("\nEnter Product ID to Delete ");
