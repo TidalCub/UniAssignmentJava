@@ -16,7 +16,8 @@ public class ProductModifier {
             ResultSet rs = db.allproducts();
 
             while(rs.next()){
-                System.out.print(rs.getString("ID")+ " ");
+                int ID = rs.getInt("ID");
+                System.out.printf("%04d ", ID);
                 System.out.print(rs.getString("Name")+ " ");
                 System.out.print(rs.getString("unitPrice")+ " ");
                 System.out.print(rs.getString("qtyInStock")+" ");
@@ -39,8 +40,12 @@ public class ProductModifier {
         Double unitPrice = input.nextDouble();
         System.out.print("\nEnter Products Qty: ");
         int qty = input.nextInt();
+
         Product newProduct = new Product(null, Name,unitPrice,qty);
+        Transaction newTransaction = new Transaction("Created", newProduct.ID, "0", Integer.toString(qty));
+
         db.newProduct(newProduct);
+        db.TransactionWriter(newTransaction);
     }
 
     public void updateProduct() throws SQLException {
@@ -50,10 +55,15 @@ public class ProductModifier {
         int productID = input.nextInt();
         System.out.print("\nEnter New Qty: ");
         int newQty = input.nextInt();
-        ResultSet rs = db.productLookup(productID);
-        Product updatProduct = new Product(productID, rs.getString("Name"), rs.getInt("unitPrice"), newQty);
-        db.updateProduct(updatProduct);
 
+        ResultSet rs = db.productLookup(productID);
+
+        int oldQty = rs.getInt("qtyInStock");
+        Transaction newTransactionReport = new Transaction("Updated", productID, Integer.toString(oldQty), Integer.toString(newQty));
+        Product updatProduct = new Product(productID, rs.getString("Name"), rs.getInt("unitPrice"), newQty);
+
+        db.updateProduct(updatProduct);
+        db.TransactionWriter(newTransactionReport);
 
 
 
@@ -64,7 +74,29 @@ public class ProductModifier {
         System.out.print("\nEnter Product ID to Delete ");
         int ID = input.nextInt();
 
-        db.removeProduct(ID);
+        Transaction newTransactionReport = new Transaction("Removed", ID, "", "");
 
+        db.removeProduct(ID);
+        db.TransactionWriter(newTransactionReport);
+    }
+
+    public void transactionReport(){
+        System.out.print("""
+                
+                -----------------------------------------------------------
+                                   Transaction Report
+                -----------------------------------------------------------
+                
+                Type    Product ID    Old Qty     Current Qty     TimeStamp
+                
+                """);
+        try {
+            ResultSet Report = db.getTransaction();
+            while (Report.next()) {
+            System.out.printf("%s   %04d            %s            %s            %s \n", Report.getString("Type"), Report.getInt("ProductID"), Report.getString("ChangedFrom"), Report.getString("ChangedTo"), Report.getString("Timestamp"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

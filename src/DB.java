@@ -3,6 +3,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 public class DB {
     static ConnectDB DB = new ConnectDB();
     static Connection connection = DB.DBConnect();
@@ -19,31 +21,44 @@ public class DB {
             ResultSet rs = statement.executeQuery("select * from Stock");
             return rs;
         } catch(SQLException e){
-            System.err.println(e.getMessage());
+            throw new RuntimeException(e);
         }
-        return null;
+    }
+    public static int lastProduct(){
+        try{
+            ResultSet lastid = statement.executeQuery("SELECT * FROM Stock ORDER BY ID DESC LIMIT 1;");
+            while(lastid.next()) {
+                return lastid.getInt("ID");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return 0;
     }
     public ResultSet productLookup(int ID){
         try{
-            ResultSet singleProduct = statement.executeQuery("select * from stock where ID = " + ID + " limit 1 ");
+            ResultSet singleProduct = statement.executeQuery("select * from Stock where ID = " + ID + " limit 1 ");
+
             return singleProduct;
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            throw new RuntimeException(e);
         }
-        return null;
     }
     public void newProduct(Product newProduct){
         try{
-            String insert = "INSERT INTO Stock(Name, unitPrice, qtyInStock, totalPrice) VALUES (?,?,?,?)";
+            String insert = "INSERT INTO Stock(ID, Name, unitPrice, qtyInStock, totalPrice) VALUES (?,?,?,?,?)";
             PreparedStatement pstmt = connection.prepareStatement(insert);
-            pstmt.setString(1, newProduct.Name);
-            pstmt.setDouble(2, newProduct.unitPrice);
-            pstmt.setInt(3, newProduct.qtyInStock);
-            pstmt.setDouble(4, newProduct.totalPrice);
+            pstmt.setInt(1, newProduct.ID);
+            pstmt.setString(2, newProduct.Name);
+            pstmt.setDouble(3, newProduct.unitPrice);
+            pstmt.setInt(4, newProduct.qtyInStock);
+            pstmt.setDouble(5, newProduct.totalPrice);
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            throw new RuntimeException(e);
 
         }
 
@@ -56,7 +71,7 @@ public class DB {
 
             return "Ok";
         } catch (SQLException e) {
-            return e.getMessage();
+            throw new RuntimeException(e);
         }
 
     }
@@ -70,7 +85,36 @@ public class DB {
 
             return "Ok";
         } catch (SQLException e) {
-            return e.getMessage();
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public void TransactionWriter(Transaction Transaction){
+        try{
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+            LocalDateTime dateTime = LocalDateTime.now();
+            String TimeStamp = dateTime.format(formatter);
+
+            String insert = "INSERT INTO TransactionTable(Type, ProductID, ChangedFrom, ChangedTo, TimeStamp) VALUES (?,?,?,?,?)";
+            PreparedStatement pstmt = connection.prepareStatement(insert);
+            pstmt.setString(1, Transaction.Type);
+            pstmt.setInt(2, Transaction.ProductID);
+            pstmt.setString(3, Transaction.ChangedFrom);
+            pstmt.setString(4,Transaction.ChangedTo);
+            pstmt.setString(5, TimeStamp);
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public ResultSet getTransaction(){
+        try{
+            ResultSet report = statement.executeQuery("select * from TransactionTable");
+            return report;
+        } catch(SQLException e){
+            throw new RuntimeException(e);
         }
 
     }

@@ -46,6 +46,7 @@ public class store
                 break;
             case 4:
                 System.out.print("\n Report printed");
+                pm.transactionReport();
                 break;
             case 5:
 
@@ -55,6 +56,9 @@ public class store
                 System.out.println("Exiting... ");
                 System.out.println("\n\n Thanks for using this program...!");
                 break loop;
+             case 7:
+
+                 break;
 
             default:
                 System.out.println("This doesn't appear to be a valid option...!");

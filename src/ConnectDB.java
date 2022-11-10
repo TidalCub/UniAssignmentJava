@@ -13,14 +13,15 @@ public class ConnectDB {
         Statement statement = connection.createStatement();
         statement.setQueryTimeout(30);  // set timeout to 30 sec
 
-        statement.executeUpdate("create table IF NOT EXISTS Stock (ID integer PRIMARY KEY autoincrement, Name string, unitPrice double, qtyInStock integer, totalPrice double)");
-
-
+        statement.executeUpdate("create TABLE IF NOT EXISTS Stock (ID integer PRIMARY KEY, Name string, unitPrice double, qtyInStock integer, totalPrice double)");
+        statement.executeUpdate("create TABLE IF NOT EXISTS TransactionTable (ID integer PRIMARY KEY autoincrement, Type string, ProductID integer ,ChangedFrom string, ChangedTo string, Timestamp string)");
+        return connection;
     } catch (SQLException e) {
         //throw new RuntimeException(e);
-        System.err.println(e.getMessage());
+        System.err.println(e);
     }
-    return connection;
+
+       return connection;
    }
 
 
